@@ -2,8 +2,6 @@ import { useState } from 'react'
 
 const Header = ({text}) => (<h1>{text}</h1>)
 
-const Display = ({text, value}) => <div> {text} {value}</div>
-
 const Button = ({ handleClick, text }) => {
   return (
     <button onClick={handleClick}>
@@ -12,16 +10,21 @@ const Button = ({ handleClick, text }) => {
   )
 }
 
+const StatisticsLine = ({text, value}) => {
+  return (
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
+  )
+}
+
 const Statistics = (props) => {
   console.log(props)
   
-  const Average = (value, total) => {
-    return value/total
-  }
+  const Average = (value, total) => value/total
 
-  const toPercentages = (value) => {
-    return value*100+'%'
-  }
+  const Round = (value) => Number.parseFloat(value).toFixed(1)
 
   if (props.count === 0) {
     return (
@@ -32,13 +35,16 @@ const Statistics = (props) => {
   }
 
   return (
-    <>
-      <Display text="good" value= {props.good} />
-      <Display text="neutral" value= {props.neutral} />
-      <Display text="bad" value= {props.bad} />
-      <Display text="average" value={Average(props.total, props.count)} />
-      <Display text="positive" value={toPercentages(Average(props.good, props.count))} />
-    </>)
+    <table>
+      <tbody>
+      <StatisticsLine text="good" value= {props.good} />
+      <StatisticsLine text="neutral" value= {props.neutral} />
+      <StatisticsLine text="bad" value= {props.bad} />
+      <StatisticsLine text="all" value= {props.count} />
+      <StatisticsLine text="average" value={Round(Average(props.total, props.count))} />
+      <StatisticsLine text="positive" value={Round((Average(props.good, props.count))*100)+'%'} />
+      </tbody>
+    </table>)
 }
 
 const App = () => {
