@@ -23,12 +23,19 @@ const Statistics = (props) => {
     return value*100+'%'
   }
 
+  if (props.count === 0) {
+    return (
+      <>
+        No feedback given
+      </>
+    )
+  }
+
   return (
     <>
       <Display text="good" value= {props.good} />
       <Display text="neutral" value= {props.neutral} />
       <Display text="bad" value= {props.bad} />
-
       <Display text="average" value={Average(props.total, props.count)} />
       <Display text="positive" value={toPercentages(Average(props.good, props.count))} />
     </>)
