@@ -17,7 +17,7 @@ const MostVotes = ({anecdotes, selected_points}) => {
   <>
     {anecdotes[index]}
     <p>
-    has {max} points
+      has {max} points
     </p>
   </>
   )
