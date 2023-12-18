@@ -10,6 +10,19 @@ const Button = ({ handleClick, text }) => {
   )
 }  
 
+const MostVotes = ({anecdotes, selected_points}) => {
+  const max = Math.max(...selected_points)
+  const index = selected_points.findIndex((point) => point == max)
+  return (
+  <>
+    {anecdotes[index]}
+    <p>
+    has {max} points
+    </p>
+  </>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -36,15 +49,19 @@ const App = () => {
     console.log("points after ", selected_points)
   }
 
-
   return (
     <div>
-      {anecdotes[selected]}
+      <h1>Anecdote of the day</h1>
+      <p>
+        {anecdotes[selected]}
+      </p>
       <p>
         has {selected_points[selected]} votes
       </p>
       <Button handleClick={Vote()} text='vote' />
       <Button handleClick={getAnecdote()} text='next anecdote' />
+      <h1>Anecdote with most votes</h1>
+      <MostVotes anecdotes = {anecdotes} selected_points = {selected_points}/>
     </div>
   )
 }
