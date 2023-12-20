@@ -17,9 +17,13 @@ const App = () => {
     console.log("Button clicked ", event.target)
 
     const nameObject = {name: newName}
-    setPersons(persons.concat(nameObject))
-    setNewName('')
-    console.log("persons ", persons)
+    const occupied = persons.find((element) => element.name == newName)
+    console.log(occupied)
+
+    occupied ? alert(`${newName} is already added to phonebook`) 
+    : setPersons(persons.concat(nameObject))
+      setNewName('')
+      console.log("persons ", persons)
   }
 
   const handleNameChange = (event) => {
