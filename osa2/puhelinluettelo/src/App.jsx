@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Filter = (props) => {
   return (
@@ -40,20 +41,27 @@ const Persons = ({persons, newFilter}) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456'},
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ]) 
+  const [persons, setPersons] = useState([])
 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
 
+  const hook = () => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }
+
+  useEffect(hook, [])
+
   const addPerson = (event) => {
     event.preventDefault()
-    console.log("Button clicked ", event.target)
+    console.log('Button clicked ', event.target)
 
     const personObject = {name: newName, number:newNumber}
     const occupied = persons.find((element) => element.name == newName)
@@ -63,7 +71,7 @@ const App = () => {
     : setPersons(persons.concat(personObject))
       setNewName('')
       setNewNumber('')
-      console.log("persons ", persons)
+      console.log('persons ', persons)
   }
 
   const handleNameChange = (event) => {
