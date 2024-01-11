@@ -9,6 +9,13 @@ const Filter = (props) => {
       </div>
   )
 }
+const Button = ({ handleClick, text }) => {
+  return (
+    <button onClick={handleClick}>
+      {text}
+    </button>
+  )
+}
 
 const PersonForm = (props) => {
   return (
@@ -32,11 +39,14 @@ const PersonForm = (props) => {
   )
 }
 
-const Persons = ({persons, newFilter}) => {
+const Persons = ({persons, newFilter, removePerson}) => {
   const filteredPpl = persons.filter((person) => 
                           person.name.toLowerCase().includes(newFilter.toLowerCase()))
   return (filteredPpl.map( person =>
-      <li key={person.name}>{person.name} {person.number}</li>
+      <li key={person.name}>
+        {person.name} {person.number} 
+        <Button handleClick={() => removePerson(person.id)} text="delete" />
+      </li>
   ))
 }
 
@@ -71,7 +81,7 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
-      console.log('persons ', persons)
+    console.log('persons ', persons)
   }
 
   const handleNameChange = (event) => {
@@ -89,6 +99,16 @@ const App = () => {
     setNewFilter(event.target.value)
   }
 
+  const removePerson = (id) => {
+    const person = persons.find(n => n.id === id)
+    console.log("person to be deleted ", person)
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService.remove(person.id)
+      console.log('persons ', persons)
+      const updatedPersons = persons.filter((updatedPerson) => updatedPerson.id !== person.id)
+      setPersons(updatedPersons)
+    }
+  }
 
   return (
     <div>
@@ -104,7 +124,7 @@ const App = () => {
       />  
       <h2>Numbers</h2>
       <ul>
-        <Persons persons={persons} newFilter={newFilter}/>
+        <Persons persons={persons} newFilter={newFilter} removePerson={removePerson} />
       </ul>
     </div>
   )
