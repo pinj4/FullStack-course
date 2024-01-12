@@ -1,0 +1,14 @@
+h2 {
+    color: darkolivegreen;
+    font-style: italic;
+}
+
+.notif {
+    color: rgb(35, 49, 35);
+    background: rgb(147, 165, 148);
+    font-size: 20px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }

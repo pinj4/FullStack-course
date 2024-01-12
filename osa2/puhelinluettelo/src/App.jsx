@@ -17,6 +17,18 @@ const Button = ({ handleClick, text }) => {
   )
 }
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="notif">
+      {message}
+    </div>
+  )
+}
+
 const PersonForm = (props) => {
   return (
     <form onSubmit={props.addPerson}> 
@@ -57,6 +69,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
 
+  const [message, setMessage] = useState(null)
+
   useEffect(() => {
     personService
       .getAll()
@@ -75,7 +89,12 @@ const App = () => {
 
     if (occupied){
       if (occupied.number == newNumber) {
-        alert(`${newName} is already added to phonebook`)
+        setMessage(
+          `${personObject.name} is already added to phonebook`
+        )
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000)
         setNewName('')
         setNewNumber('')
       } else if(window.confirm(`${personObject.name} is already added to phonebook, replace the old number with a new one?`)) {
@@ -83,6 +102,12 @@ const App = () => {
         .update(occupied.id, personObject)
           .then(returnedPerson => {
           setPersons(persons.map(person => person.id !== occupied.id ? person : returnedPerson))
+          setMessage(
+            `Changed ${personObject.name}'s number`
+          )
+          setTimeout(() => {
+            setMessage(null)
+          }, 3000)
           setNewName('')
           setNewNumber('')
         })
@@ -92,6 +117,12 @@ const App = () => {
       .create(personObject)
         .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
+        setMessage(
+          `Added ${personObject.name}`
+        )
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000)
         setNewName('')
         setNewNumber('')
       })
@@ -121,12 +152,19 @@ const App = () => {
       console.log('persons ', persons)
       const updatedPersons = persons.filter((updatedPerson) => updatedPerson.id !== person.id)
       setPersons(updatedPersons)
+      setMessage(
+        `Deleted ${person.name}`
+      )
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
     }
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange}/>    
       <h2>add a new</h2>
       <PersonForm 
