@@ -73,15 +73,29 @@ const App = () => {
     const occupied = persons.find((element) => element.name == newName)
     console.log(occupied)
 
-    occupied ? alert(`${newName} is already added to phonebook`)
-    : personService
+    if (occupied){
+      if (occupied.number == newNumber) {
+        alert(`${newName} is already added to phonebook`)
+        setNewName('')
+        setNewNumber('')
+      } else if(window.confirm(`${personObject.name} is already added to phonebook, replace the old number with a new one?`)) {
+        personService
+        .update(occupied.id, personObject)
+          .then(returnedPerson => {
+          setPersons(persons.map(person => person.id !== occupied.id ? person : returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+      }
+    } else {
+      personService
       .create(personObject)
         .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
       })
-    console.log('persons ', persons)
+    }
   }
 
   const handleNameChange = (event) => {
