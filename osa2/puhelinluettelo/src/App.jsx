@@ -17,13 +17,15 @@ const Button = ({ handleClick, text }) => {
   )
 }
 
-const Notification = ({ message }) => {
+const Notification = ({ message, errorMessage }) => {
+  const messageType = errorMessage ? "error" : "notif"
+
   if (message === null) {
     return null
   }
 
   return (
-    <div className="notif">
+    <div className={messageType}>
       {message}
     </div>
   )
@@ -70,6 +72,7 @@ const App = () => {
   const [newFilter, setNewFilter] = useState('')
 
   const [message, setMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(false)
 
   useEffect(() => {
     personService
@@ -92,6 +95,7 @@ const App = () => {
         setMessage(
           `${personObject.name} is already added to phonebook`
         )
+        setErrorMessage(true)
         setTimeout(() => {
           setMessage(null)
         }, 3000)
@@ -105,6 +109,7 @@ const App = () => {
           setMessage(
             `Changed ${personObject.name}'s number`
           )
+          setErrorMessage(false)
           setTimeout(() => {
             setMessage(null)
           }, 3000)
@@ -120,6 +125,7 @@ const App = () => {
         setMessage(
           `Added ${personObject.name}`
         )
+        setErrorMessage(false)
         setTimeout(() => {
           setMessage(null)
         }, 3000)
@@ -149,12 +155,23 @@ const App = () => {
     console.log("person to be deleted ", person)
     if (window.confirm(`Delete ${person.name}?`)) {
       personService.remove(person.id)
+      .catch(error => {
+        setMessage(
+          `Information of '${person.name}' was already removed from server`
+        )
+        setErrorMessage(true)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+        setPersons(persons.filter(n => n.id !== id))
+      })
       console.log('persons ', persons)
       const updatedPersons = persons.filter((updatedPerson) => updatedPerson.id !== person.id)
       setPersons(updatedPersons)
       setMessage(
         `Deleted ${person.name}`
       )
+      setErrorMessage(false)
       setTimeout(() => {
         setMessage(null)
       }, 3000)
@@ -164,7 +181,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} errorMessage={errorMessage}/>
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange}/>    
       <h2>add a new</h2>
       <PersonForm 
