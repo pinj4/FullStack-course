@@ -11,7 +11,6 @@ const Find = (props) => {
 }
 
 const Countries = ({countries, newFilter}) => {
-
   if (newFilter === '') {
     return null
   }
@@ -21,17 +20,17 @@ const Countries = ({countries, newFilter}) => {
 
   if (filteredCountries.length == 1)                
     return (
-        <div>
-          <Country country = {filteredCountries[0]} />
-        </div>
-  )
+      <div>
+        <Country country = {filteredCountries[0]} />
+      </div>
+    )
 
   if (filteredCountries.length <= 10)                
-  return (filteredCountries.map( country =>
+    return (filteredCountries.map( country =>
       <div key= {country.name.common}>
         {country.name.common}
       </div>
-))
+    ))
 
   return (
     <div> too many matches, specify another filter </div>
@@ -64,9 +63,6 @@ const Languages = ({languages}) => {
 function App() {
   const [newFilter, setNewFilter] = useState('')
   const [countries, setCountries] = useState([])
-  const [someCountries, setSomeCountries] = useState([])
-
-
 
   useEffect(() => {
     countryService.getAll()
@@ -74,31 +70,6 @@ function App() {
         setCountries(initialCountries)
       })
   }, [])
-
-  /*useEffect(() => {
-    const filteredCountries = countries.filter((country) => 
-                          country.name.common.toLowerCase().includes(newFilter.toLowerCase()))
-    console.log("filtered ", filteredCountries)
-    if (filteredCountries.length <= 10) {
-      console.log("country name common ", filteredCountries.map( country =>  country.name.common))
-      filteredCountries.map( country =>  
-      countryService.getFiltered(country.name.common)
-        .then(responseCountry => {
-          setSomeCountries(someCountries.concat(responseCountry))
-          console.log("res countries ", responseCountry)
-        })
-      )
-    console.log("countries ", someCountries)
-    }
-  }, [newFilter])*/
-
-  /*useEffect(() => {
-    const newfilter = newFilter
-    countryService.getFiltered2(newfilter)
-      .then(resCountries => {
-        setSomeCountries(resCountries)
-      })
-    }, [newFilter])*/
 
   const handleFilterChange = (event) => {
     console.log(event.target.value)
@@ -114,6 +85,3 @@ function App() {
 }
 
 export default App
-
-/*someCountries.map(country =>
-  <Country key = {country.common.name} country={country} />*/
