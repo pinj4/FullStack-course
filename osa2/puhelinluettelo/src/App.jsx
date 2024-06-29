@@ -90,6 +90,26 @@ const App = () => {
     const occupied = persons.find((element) => element.name == newName)
     console.log(occupied)
 
+    if (!personObject.name) {
+      setMessage(
+      `name missing`
+      )
+      setErrorMessage(true)
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000)
+    }
+
+    if (!personObject.number) {
+      setMessage(
+      `number missing`
+      )
+      setErrorMessage(true)
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000)
+    }
+
     if (occupied){
       if (occupied.number == newNumber) {
         setMessage(
