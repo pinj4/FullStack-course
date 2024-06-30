@@ -152,6 +152,18 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
+      .catch(error => {
+        console.log(error.response.data)
+        setMessage(
+          error.response.data.error
+        )
+        setErrorMessage(true)
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000)
+        setNewName('')
+        setNewNumber('')
+      })
     }
   }
 
