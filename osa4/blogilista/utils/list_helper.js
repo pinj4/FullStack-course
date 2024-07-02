@@ -8,7 +8,22 @@ const totalLikes = (blogs) => {
   }, 0)
 }
 
+const favoriteBlog = (blogs) => {
+  const mostLikes = blogs.reduce((mostLikes, blog) => {
+    return Math.max(blog.likes, mostLikes)
+  }, -Infinity)
+
+  const favorite = blogs.find((blog) => blog.likes === mostLikes)
+
+  return JSON.stringify({
+    title: favorite.title,
+    author: favorite.author,
+    likes: favorite.likes
+  })
+}
+
 module.exports = {
   dummy,
-  totalLikes
+  totalLikes,
+  favoriteBlog
 }
