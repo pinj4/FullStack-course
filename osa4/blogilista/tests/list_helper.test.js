@@ -105,7 +105,7 @@ describe('favorite blog', () => {
 })
 
 describe('most blogs', () => {
-  test ('when list has only one blog it shows that', () => {
+  test ('when list has only one blog it shows that one', () => {
     const result = listHelper.mostBlogs(listWithOneBlog)
     assert.strictEqual(result, JSON.stringify({
       'author':'Edsger W. Dijkstra',
@@ -113,11 +113,29 @@ describe('most blogs', () => {
     }))
   })
 
-  test('shows the correct author when list has multiple blogs', () => {
+  test('shows the correct author and blogs sum when list has multiple blogs', () => {
     const result = listHelper.mostBlogs(blogs)
     assert.strictEqual(result, JSON.stringify({
       'author':'Robert C. Martin',
       'blogs':3
+    }))
+  })
+})
+
+describe('most likes', () => {
+  test ('when list has only one blog it shows that one', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    assert.strictEqual(result, JSON.stringify({
+      'author':'Edsger W. Dijkstra',
+      'likes':5
+    }))
+  })
+
+  test('shows the correct author and likes sum when list has multiple blogs', () => {
+    const result = listHelper.mostLikes(blogs)
+    assert.strictEqual(result, JSON.stringify({
+      'author':'Edsger W. Dijkstra',
+      'likes':17
     }))
   })
 })
