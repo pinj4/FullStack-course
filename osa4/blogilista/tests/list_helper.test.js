@@ -103,3 +103,21 @@ describe('favorite blog', () => {
     }))
   })
 })
+
+describe('most blogs', () => {
+  test ('when list has only one blog it shows that', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    assert.strictEqual(result, JSON.stringify({
+      'author':'Edsger W. Dijkstra',
+      'blogs':1
+    }))
+  })
+
+  test('shows the correct author when list has multiple blogs', () => {
+    const result = listHelper.mostBlogs(blogs)
+    assert.strictEqual(result, JSON.stringify({
+      'author':'Robert C. Martin',
+      'blogs':3
+    }))
+  })
+})
