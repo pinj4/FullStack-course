@@ -24,7 +24,14 @@ test.only('there are six blogs', async () => {
     const response = await api.get('/api/blogs')
   
     assert.strictEqual(response.body.length, 6)
-  })
+})
+
+test.only('blog identifier is named as id', async() => {
+    const response = await api.get('/api/blogs')
+    const first = response.body[0]
+
+    assert.strictEqual(first.hasOwnProperty('id'), true)
+})
 
 after(async () => {
   await mongoose.connection.close()
