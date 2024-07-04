@@ -9,11 +9,11 @@ const blogSchema = mongoose.Schema({
 
 blogSchema.pre('save', function(next) {
   if (this.likes === null) {
-      this.likes = 0;
+    this.likes = 0
   }
 
-  next();
-});
+  next()
+})
 
 blogSchema.set('toJSON', {
   transform: (document, returnedObject) => {
