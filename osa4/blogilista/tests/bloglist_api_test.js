@@ -1,4 +1,4 @@
-const { test, after, beforeEach} = require('node:test')
+const { test, after, beforeEach } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -9,28 +9,50 @@ const Blog = require('../models/blog')
 const api = supertest(app)
 
 beforeEach(async () => {
-    await Blog.deleteMany({})
-    await Blog.insertMany(helper.initialBlogs)
-  })
+  await Blog.deleteMany({})
+  await Blog.insertMany(helper.initialBlogs)
+})
 
-test.only('blogs are returned as json', async () => {
+test('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
 
-test.only('there are six blogs', async () => {
-    const response = await api.get('/api/blogs')
-  
-    assert.strictEqual(response.body.length, 6)
+test('there are six blogs', async () => {
+  const response = await api.get('/api/blogs')
+
+  assert.strictEqual(response.body.length, 6)
 })
 
-test.only('blog identifier is named as id', async() => {
-    const response = await api.get('/api/blogs')
-    const first = response.body[0]
+test('blog identifier is named as id', async() => {
+  const response = await api.get('/api/blogs')
+  const first = response.body[0]
 
-    assert.strictEqual(first.hasOwnProperty('id'), true)
+  assert.strictEqual(Object.hasOwn(first, 'id'), true)
+})
+
+test('a valid blog can be added', async() => {
+  const newBlog = {
+    title: 'testblog',
+    author: 'Test Guy',
+    url: 'testblog.com',
+    likes: 10
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  const titles = response.body.map(r => r.title)
+
+  assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
+  assert(titles.includes('testblog'))
+
 })
 
 after(async () => {
