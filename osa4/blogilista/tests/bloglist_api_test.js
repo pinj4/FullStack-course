@@ -55,6 +55,31 @@ test('a valid blog can be added', async() => {
 
 })
 
+test('blog with no likes can be added and shows 0 likes', async() => {
+    const newBlog = {
+      title: 'testblog2',
+      author: 'Test Guy2',
+      url: 'testblog2.com',
+      likes: ''
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  
+    const response = await api.get('/api/blogs')
+    const titles = response.body.map(r => r.title)
+  
+    assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
+
+    const last = response.body.pop()
+    assert.strictEqual(last.title, 'testblog2')
+    assert.strictEqual(last.likes, 0)
+  
+  })
+
 after(async () => {
   await mongoose.connection.close()
 })
