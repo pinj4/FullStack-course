@@ -82,6 +82,22 @@ test('blog with no likes can be added and shows 0 likes', async() => {
 
 })
 
+test('blog can be deleted', async() => {
+  const blogs = await helper.blogsInDb()
+
+  const blogToDelete = blogs[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const blogs_after = await helper.blogsInDb()
+  assert.strictEqual(blogs_after.length, helper.initialBlogs.length - 1)
+
+  const titles = blogs_after.map(r => r.title)
+  assert(!titles.includes(blogToDelete.title))
+})
+
 describe('when there is initially one user at db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
