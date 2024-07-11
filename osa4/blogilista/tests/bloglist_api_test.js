@@ -72,7 +72,6 @@ test('blog with no likes can be added and shows 0 likes', async() => {
     .expect('Content-Type', /application\/json/)
 
   const response = await api.get('/api/blogs')
-  const titles = response.body.map(r => r.title)
 
   assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
 
@@ -129,6 +128,112 @@ describe('when there is initially one user at db', () => {
     const usernames = usersAtEnd.map(u => u.username)
     assert(usernames.includes(newUser.username))
   })
+
+  test('creation fails with proper statuscode and message if username already taken', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'root',
+      name: 'Superuser',
+      password: 'salainen',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert(result.body.error.includes('expected `username` to be unique'))
+
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+
+  test('creation fails with proper statuscode and message if username < 3 characters', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'no',
+      name: 'user',
+      password: 'salainen',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert(result.body.error.includes('username needs to be at least 3 characters long'))
+
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+
+  test('creation fails with proper statuscode and message if password < 3 characters', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'username',
+      name: 'user',
+      password: 'no',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert(result.body.error.includes('password needs to be at least 3 characters long'))
+
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+
+  test('creation fails with proper statuscode and message without a username', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: '',
+      name: 'user',
+      password: 'topsecret',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert(result.body.error.includes('username missing'))
+
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+
+  test('creation fails with proper statuscode and message without a password', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'username',
+      name: 'user',
+      password: '',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert(result.body.error.includes('password missing'))
+
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+
 })
 
 after(async () => {
