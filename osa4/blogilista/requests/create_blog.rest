@@ -1,6 +1,6 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwiaWQiOiI2Njg4ZTFlODA1ZmIzYmZkN2ExNWVjOWIiLCJpYXQiOjE3MjA3ODA3MTN9.xwJuXON84-nvfdrK9BEQIvQG_ECEFOkLozgU81kUkc4
+Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwiaWQiOiI2Njg4ZTFlODA1ZmIzYmZkN2ExNWVjOWIiLCJpYXQiOjE3MjA3ODM2NDQsImV4cCI6MTcyMDc4NzI0NH0.X9QQm0uFZtoLAgTqNedwAoxm-e2mERehw2fh0e8wSgw
 
 {
   "title": "akun blogi",
