@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lMiIsImlkIjoiNjY5MTFhYzI5ZmU1Yjk2Y2MyNjRiYTkzIiwiaWF0IjoxNzIwNzg1NjQ3LCJleHAiOjE3MjA3ODkyNDd9.gsipBcaDll_e6-kVLrfjiO9rFBcYJyCM9P60UMpPyhE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lMyIsImlkIjoiNjY5NjNhZmNkZWI3ODY5Y2EyMDIxOGQ3IiwiaWF0IjoxNzIxMTIxNTQ1LCJleHAiOjE3MjExMjUxNDV9.gbJnOFSDelmreyG4Yn12W9npN1cZWPkLo_5AUJ15n3Q
 
 {
-  "title": "akun blogi",
-  "author": "aku ankka",
-  "url": "akunblogi.fi",
-  "likes": "7"
+  "title": "mikin blogi",
+  "author": "mikki hiiri",
+  "url": "mikinblogi.fi",
+  "likes": "10"
 }
