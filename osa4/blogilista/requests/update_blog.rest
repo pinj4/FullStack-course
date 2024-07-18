@@ -1,10 +1,10 @@
-POST http://localhost:3001/api/blogs/66991bf820f356479d57f95b
+PUT http://localhost:3001/api/blogs/66991bf820f356479d57f95b
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lMyIsImlkIjoiNjY5NjNhZmNkZWI3ODY5Y2EyMDIxOGQ3IiwiaWF0IjoxNzIxMzA4MTQ1LCJleHAiOjE3MjEzMTE3NDV9.i7_cvpu9ftPbrsXc17sVwDozPTD-KuhpLTNfyTQBouU
 
 {
   "title": "mikin blogi",
   "author": "mikki hiiri",
-  "url": "hiiriblogi.fi",
-  "likes": "10"
+  "url": "url.com",
+  "likes": "10000"
 }
