@@ -130,6 +130,70 @@ test('blog with no likes can be added and shows 0 likes', async() => {
 
 })
 
+test('a blog cant be added without a title', async() => {
+  const user = {
+    username: 'tester',
+    password: 'tester'
+  }
+  const res = await api
+    .post('/api/login')
+    .send(user)
+    .expect(200)
+
+  const newBlog = {
+    title: '',
+    author: 'Test Guy',
+    url: 'testblog.com',
+    likes: 10
+  }
+
+  await api
+    .post('/api/blogs')
+    .set('Authorization', `Bearer ${res.body.token}`)
+    .send(newBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  const titles = response.body.map(r => r.title)
+
+  assert.strictEqual(response.body.length, helper.initialBlogs.length)
+  assert(!titles.includes('testblog'))
+
+})
+
+test('a blog cant be added without an url', async() => {
+  const user = {
+    username: 'tester',
+    password: 'tester'
+  }
+  const res = await api
+    .post('/api/login')
+    .send(user)
+    .expect(200)
+
+  const newBlog = {
+    title: 'testblog',
+    author: 'Test Guy',
+    url: '',
+    likes: 10
+  }
+
+  await api
+    .post('/api/blogs')
+    .set('Authorization', `Bearer ${res.body.token}`)
+    .send(newBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  const titles = response.body.map(r => r.title)
+
+  assert.strictEqual(response.body.length, helper.initialBlogs.length)
+  assert(!titles.includes('testblog'))
+
+})
+
 test('blog can be deleted by the correct user', async() => {
   const user = {
     username: 'tester',
