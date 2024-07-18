@@ -1,6 +1,6 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lMyIsImlkIjoiNjY5NjNhZmNkZWI3ODY5Y2EyMDIxOGQ3IiwiaWF0IjoxNzIxMTIxNTQ1LCJleHAiOjE3MjExMjUxNDV9.gbJnOFSDelmreyG4Yn12W9npN1cZWPkLo_5AUJ15n3Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lMyIsImlkIjoiNjY5NjNhZmNkZWI3ODY5Y2EyMDIxOGQ3IiwiaWF0IjoxNzIxMzA1MDk1LCJleHAiOjE3MjEzMDg2OTV9.1NPe1gezaj0ues91Lb6Gja7vx_bElk58YiKlmt0Tzs8
 
 {
   "title": "mikin blogi",

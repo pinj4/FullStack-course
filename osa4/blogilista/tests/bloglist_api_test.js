@@ -13,6 +13,13 @@ const api = supertest(app)
 beforeEach(async () => {
   await Blog.deleteMany({})
   await Blog.insertMany(helper.initialBlogs)
+
+  await User.deleteMany({})
+
+  const passwordHash = await bcrypt.hash('tester', 10)
+  const user = new User({ username: 'tester', name: 'tester', passwordHash })
+
+  await user.save()
 })
 
 test('blogs are returned as json', async () => {
@@ -36,6 +43,15 @@ test('blog identifier is named as id', async() => {
 })
 
 test('a valid blog can be added', async() => {
+  const user = {
+    username: 'tester',
+    password: 'tester'
+  }
+  const res = await api
+    .post('/api/login')
+    .send(user)
+    .expect(200)
+
   const newBlog = {
     title: 'testblog',
     author: 'Test Guy',
@@ -45,6 +61,7 @@ test('a valid blog can be added', async() => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization', `Bearer ${res.body.token}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -57,7 +74,38 @@ test('a valid blog can be added', async() => {
 
 })
 
+test('a blog cant be added without being logged in', async() => {
+
+  const newBlog = {
+    title: 'testblog',
+    author: 'Test Guy',
+    url: 'testblog.com',
+    likes: 10
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(401)
+
+  const response = await api.get('/api/blogs')
+  const titles = response.body.map(r => r.title)
+
+  assert.strictEqual(response.body.length, helper.initialBlogs.length)
+  assert(!titles.includes('testblog'))
+
+})
+
 test('blog with no likes can be added and shows 0 likes', async() => {
+  const user = {
+    username: 'tester',
+    password: 'tester'
+  }
+  const res = await api
+    .post('/api/login')
+    .send(user)
+    .expect(200)
+
   const newBlog = {
     title: 'testblog2',
     author: 'Test Guy2',
@@ -67,6 +115,7 @@ test('blog with no likes can be added and shows 0 likes', async() => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization', `Bearer ${res.body.token}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -81,20 +130,103 @@ test('blog with no likes can be added and shows 0 likes', async() => {
 
 })
 
-test('blog can be deleted', async() => {
+test('blog can be deleted by the correct user', async() => {
+  const user = {
+    username: 'tester',
+    password: 'tester'
+  }
+
+  const res = await api
+    .post('/api/login')
+    .send(user)
+    .expect(200)
+
+  const toBeDeleted = {
+    title: 'deletethis',
+    author: 'temp',
+    url: 'deletedblog.com',
+    likes: 10
+  }
+
+  await api
+    .post('/api/blogs')
+    .set('Authorization', `Bearer ${res.body.token}`)
+    .send(toBeDeleted)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
   const blogs = await helper.blogsInDb()
 
-  const blogToDelete = blogs[0]
+  const blogToDelete = blogs.pop()
+  assert.strictEqual('deletethis', blogToDelete.title)
 
   await api
     .delete(`/api/blogs/${blogToDelete.id}`)
+    .set('Authorization', `Bearer ${res.body.token}`)
     .expect(204)
 
   const blogs_after = await helper.blogsInDb()
-  assert.strictEqual(blogs_after.length, helper.initialBlogs.length - 1)
+  assert.strictEqual(blogs_after.length, helper.initialBlogs.length)
 
   const titles = blogs_after.map(r => r.title)
   assert(!titles.includes(blogToDelete.title))
+})
+
+test('blog cant be deleted with unauthorized user', async() => {
+  const user = {
+    username: 'tester',
+    password: 'tester'
+  }
+
+  const res = await api
+    .post('/api/login')
+    .send(user)
+    .expect(200)
+
+  const toBeDeleted = {
+    title: 'deletethis',
+    author: 'temp',
+    url: 'deletedblog.com',
+    likes: 10
+  }
+
+  await api
+    .post('/api/blogs')
+    .set('Authorization', `Bearer ${res.body.token}`)
+    .send(toBeDeleted)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const passwordHash = await bcrypt.hash('tester2', 10)
+  const user2 = new User({ username: 'tester2', name: 'tester2', passwordHash })
+
+  await user2.save()
+
+  const user2LogIn = {
+    username: 'tester2',
+    password: 'tester2'
+  }
+
+  const res2 = await api
+    .post('/api/login')
+    .send(user2LogIn)
+    .expect(200)
+
+  const blogs = await helper.blogsInDb()
+
+  const blogToDelete = blogs.pop()
+  assert.strictEqual('deletethis', blogToDelete.title)
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .set('Authorization', `Bearer ${res2.body.token}`)
+    .expect(400)
+
+  const blogs_after = await helper.blogsInDb()
+  assert.strictEqual(blogs_after.length, helper.initialBlogs.length+1)
+
+  const titles = blogs_after.map(r => r.title)
+  assert(titles.includes(blogToDelete.title))
 })
 
 describe('when there is initially one user at db', () => {

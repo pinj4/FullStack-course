@@ -14,17 +14,23 @@ const tokenExtractor = (request, response, next) => {
   const authorization = request.get('authorization')
   if (authorization && authorization.startsWith('Bearer ')) {
     request.token = authorization.replace('Bearer ', '')
+    return next()
   }
+  request.token = null
   next()
 }
 
 const userExtractor = (request, response, next) => {
+  if (!request.token){
+    request.user = null
+    return next()
+  }
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' })
+    request.user = null
+    return next()
   }
   request.user = User.findById(decodedToken.id)
-
   next()
 }
 
