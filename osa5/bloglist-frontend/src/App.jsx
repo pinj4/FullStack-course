@@ -4,12 +4,51 @@ import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+const BlogForm = (props) => {
+  return (
+    <form onSubmit={props.addBlog}> 
+    <h2>add a new blog</h2>
+    <div>
+      title: <input 
+              value={props.title}
+              onChange={props.handleTitleChange}
+            />
+    </div>
+    <div>
+      author: <input 
+              value={props.author}
+              onChange={props.handleAuthorChange}
+            />
+    </div>
+    <div>
+      url: <input 
+              value={props.url}
+              onChange={props.handleUrlChange}
+            />
+    </div>
+    <div>
+      likes: <input 
+              value={props.likes}
+              onChange={props.handleLikesChange}
+            />
+    </div>
+    <div>
+      <button type="submit">save</button>
+    </div>
+  </form>
+  )
+}
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+  const [likes, setLikes] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -98,6 +137,48 @@ const App = () => {
     </form>
   )
 
+  const addBlog = (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: title,
+      author: author,
+      url: url,
+      likes: likes,
+      user: user
+    }
+
+    blogService
+      .create(blogObject)
+        .then(returnedBlog => {
+          setBlogs(blogs.concat(returnedBlog))
+          setTitle('')
+          setAuthor('')
+          setUrl('')
+          setAuthor('')
+          setLikes('')
+        })
+  }
+
+  const handleTitleChange = (event) => {
+    console.log(event.target.value)
+    setTitle(event.target.value)
+  }
+
+  const handleAuthorChange = (event) => {
+    console.log(event.target.value)
+    setAuthor(event.target.value)
+  }
+
+  const handleUrlChange = (event) => {
+    console.log(event.target.value)
+    setUrl(event.target.value)
+  }
+
+  const handleLikesChange = (event) => {
+    console.log(event.target.value)
+    setLikes(event.target.value)
+  }
+
   return (
     <div>
     <Notification message={errorMessage} />
@@ -105,7 +186,19 @@ const App = () => {
     {user && <div>
        <p>{user.name} logged in</p>
          {logoutForm()}
+         <BlogForm
+          title={title}
+          author={author} 
+          url={url}
+          likes={likes}
+          handleTitleChange={handleTitleChange}
+          handleAuthorChange={handleAuthorChange}
+          handleUrlChange={handleUrlChange}
+          handleLikesChange={handleLikesChange}
+          addBlog={addBlog}
+          />
          {blogList()}
+
       </div>
     } 
 
