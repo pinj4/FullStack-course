@@ -39,40 +39,25 @@ const NewBlog = ({user, setErrorMessage, setMessage, blogs, setBlogs}) => {
       }
     }
 
-    const handleTitleChange = (event) => {
-        console.log(event.target.value)
-        setTitle(event.target.value)
-      }
-    
-      const handleAuthorChange = (event) => {
-        console.log(event.target.value)
-        setAuthor(event.target.value)
-      }
-    
-      const handleUrlChange = (event) => {
-        console.log(event.target.value)
-        setUrl(event.target.value)
-      }
-
     return (
       <form onSubmit={addBlog}> 
       <h2>add a new blog</h2>
       <div>
         title: <input 
                 value={title}
-                onChange={handleTitleChange}
+                onChange={({ target }) => setTitle(target.value)}
               />
       </div>
       <div>
         author: <input 
                 value={author}
-                onChange={handleAuthorChange}
+                onChange={({ target }) => setAuthor(target.value)}
               />
       </div>
       <div>
         url: <input 
                 value={url}
-                onChange={handleUrlChange}
+                onChange={({ target }) => setUrl(target.value)}
               />
       </div>
       <div>
