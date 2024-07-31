@@ -47,7 +47,6 @@ blogsRouter.delete('/:id', async (request, response) => {
 
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
-  const blogToBeUpdated = await Blog.findById(request.params.id)
   const user = await request.user
 
   if (!user) {
@@ -60,12 +59,8 @@ blogsRouter.put('/:id', async (request, response) => {
     url: body.url,
     likes: body.likes,
   }
-
-  if (blogToBeUpdated.user.toString() === user._id.toString() ) {
     const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
     response.json(updatedBlog)
-  }
-  return response.status(400).json({ error: 'wrong user' })
 })
 
 module.exports = blogsRouter

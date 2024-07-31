@@ -293,7 +293,7 @@ test('blog cant be deleted by an unauthorized user', async() => {
   assert(titles.includes(blogToDelete.title))
 })
 
-test('blog can be updated by the correct user', async() => {
+test('blog can be updated by a user', async() => {
   const user = {
     username: 'tester',
     password: 'tester'
@@ -339,69 +339,6 @@ test('blog can be updated by the correct user', async() => {
   const likes = blogs_after.map(r => r.likes)
   assert(likes.includes(newBlogInfo.likes))
   assert(!likes.includes(oldBlog.likes))
-
-})
-
-test('blog cant be updated by an unauthorized user', async() => {
-  const user = {
-    username: 'tester',
-    password: 'tester'
-  }
-
-  const res = await api
-    .post('/api/login')
-    .send(user)
-    .expect(200)
-
-  const oldBlog = {
-    title: 'title',
-    author: 'testauthor',
-    url: 'newblog.com',
-    likes: 8888
-  }
-  await api
-    .post('/api/blogs')
-    .set('Authorization', `Bearer ${res.body.token}`)
-    .send(oldBlog)
-    .expect(201)
-    .expect('Content-Type', /application\/json/)
-
-  const passwordHash = await bcrypt.hash('tester2', 10)
-  const user2 = new User({ username: 'tester2', name: 'tester2', passwordHash })
-
-  await user2.save()
-
-  const user2LogIn = {
-    username: 'tester2',
-    password: 'tester2'
-  }
-
-  const res2 = await api
-    .post('/api/login')
-    .send(user2LogIn)
-    .expect(200)
-
-  const newBlogInfo = {
-    title: oldBlog.title,
-    author: oldBlog.author,
-    url: oldBlog.url,
-    likes: 1111
-  }
-
-  const blogs = await helper.blogsInDb()
-  const oldBlogId = blogs.pop().id
-
-  await api
-    .put(`/api/blogs/${oldBlogId}`)
-    .set('Authorization', `Bearer ${res2.body.token}`)
-    .send(newBlogInfo)
-    .expect(400)
-
-  const blogs_after = await helper.blogsInDb()
-
-  const likes = blogs_after.map(r => r.likes)
-  assert(!likes.includes(newBlogInfo.likes))
-  assert(likes.includes(oldBlog.likes))
 
 })
 
