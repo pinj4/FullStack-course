@@ -104,11 +104,11 @@ const App = () => {
          {logoutForm()}
          <Togglable buttonLabel="new blog">
             <NewBlog
-            user={user}
-            setErrorMessage={setErrorMessage}
-            setMessage={setMessage}
-            blogs={blogs}
-            setBlogs={setBlogs}
+              user={user}
+              setErrorMessage={setErrorMessage}
+              setMessage={setMessage}
+              blogs={blogs}
+              setBlogs={setBlogs}
             />
         </Togglable>
          {blogList()}

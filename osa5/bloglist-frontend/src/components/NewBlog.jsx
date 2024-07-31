@@ -10,32 +10,32 @@ const NewBlog = ({user, setErrorMessage, setMessage, blogs, setBlogs}) => {
     const addBlog = async (event) => {
       event.preventDefault()
       try {
-      const blogObject = {
-        title: title,
-        author: author,
-        url: url,
-        user: user
-     }
-      const returnedBlog = await blogService.create(blogObject)
-      setBlogs(blogs.concat(returnedBlog))
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      setMessage(
-        `a new blog "${title}" by ${author} added!`
-      )
-      setErrorMessage(false)
-      setTimeout(() => {
+        const blogObject = {
+          title: title,
+          author: author,
+          url: url,
+          user: user
+      }
+        const returnedBlog = await blogService.create(blogObject)
+        setBlogs(blogs.concat(returnedBlog))
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+        setMessage(
+          `a new blog "${title}" by ${author} added!`
+        )
+        setErrorMessage(false)
+        setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+      } catch(error) {
+        setMessage(
+          'an error occured while creating a new blog'
+          )
+        setErrorMessage(true)
+        setTimeout(() => {
           setMessage(null)
         }, 5000)
-    } catch(error) {
-      setMessage(
-        'an error occured while creating a new blog'
-        )
-      setErrorMessage(true)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
       }
     }
 
