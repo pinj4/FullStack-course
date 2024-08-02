@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, user, removeBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -21,6 +21,10 @@ const Blog = ({ blog }) => {
     setBlogHidden(false)
   }
 
+  const handleRemoveBlog = () => {
+    removeBlog(blog)
+  }
+
   const likeBlog =  () => {
     console.log("blog ", blog)
     console.log("og likes: ", blog.likes, "after like: ", blog.likes+1)
@@ -36,17 +40,32 @@ const Blog = ({ blog }) => {
   }
 
   if (!blogHidden) {
-    console.log("show: ", blog.title, blog.author, blog.url, blogLikes, blog.user)
-    return (
-      <div style={blogStyle}>
-        <div>
-          <b>{blog.title} - {blog.author}</b>&ensp;<button onClick={hideBlog}>hide</button> <br />
-          {blog.url} <br />
-          likes {blogLikes}&ensp;<button onClick={likeBlog}>like</button><br />
-          {blog.user.username} <br />
+    console.log("show: ", blog.title, blog.author, blog.url, blog.likes, blog.user)
+    console.log("users ", blog.user.username, user.username)
+    if (blog.user.username == user.username) {
+      return (
+        <div style={blogStyle}>
+          <div>
+            <b>{blog.title} - {blog.author}</b>&ensp;<button onClick={hideBlog}>hide</button> <br />
+            {blog.url} <br />
+            likes {blogLikes}&ensp;<button onClick={likeBlog}>like</button><br />
+            {blog.user.username} <br />
+            <button onClick={handleRemoveBlog}>delete</button><br />
+          </div>
         </div>
-      </div>
-    )
+      )
+    } else {
+      return (
+        <div style={blogStyle}>
+          <div>
+            <b>{blog.title} - {blog.author}</b>&ensp;<button onClick={hideBlog}>hide</button> <br />
+            {blog.url} <br />
+            likes {blogLikes}&ensp;<button onClick={likeBlog}>like</button><br />
+            {blog.user.username} <br />
+          </div>
+        </div>
+      )
+    }
   } 
 
   return (
