@@ -19,6 +19,7 @@ const NewBlog = ({user, setErrorMessage, setMessage, blogs, setBlogs, closeBlogF
       }
         closeBlogForm()
         const returnedBlog = await blogService.create(blogObject)
+        console.log("created blog ", returnedBlog)
         setBlogs(blogs.concat(returnedBlog))
         setTitle('')
         setAuthor('')
