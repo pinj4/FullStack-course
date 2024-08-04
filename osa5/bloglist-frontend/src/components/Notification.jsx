@@ -1,15 +1,15 @@
 const Notification = ({ errorMessage, message }) => {
-    const messageType = errorMessage ? "error" : "notif"
+  const messageType = errorMessage ? 'error' : 'notif'
 
-    if (message === null) {
-      return null
-    }
-  
-    return (
-      <div className={messageType}>
-        {message}
-      </div>
-    )
+  if (message === null) {
+    return null
   }
-  
-  export default Notification
+
+  return (
+    <div className={messageType}>
+      {message}
+    </div>
+  )
+}
+
+export default Notification

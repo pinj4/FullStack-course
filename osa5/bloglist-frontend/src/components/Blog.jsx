@@ -26,8 +26,8 @@ const Blog = ({ blog, user, removeBlog }) => {
   }
 
   const likeBlog =  () => {
-    console.log("blog ", blog)
-    console.log("og likes: ", blog.likes, "after like: ", blog.likes+1)
+    console.log('blog ', blog)
+    console.log('og likes: ', blog.likes, 'after like: ', blog.likes+1)
     const updatedLikes = blog.likes+1
     const blogObject = {
       title: blog.title,
@@ -40,9 +40,9 @@ const Blog = ({ blog, user, removeBlog }) => {
   }
 
   if (!blogHidden) {
-    console.log("show: ", blog.title, blog.author, blog.url, blog.likes, blog.user)
-    console.log("users ", blog.user.username, user.username)
-    if (blog.user.username == user.username) {
+    console.log('show: ', blog.title, blog.author, blog.url, blog.likes, blog.user)
+    console.log('users ', blog.user.username, user.username)
+    if (blog.user.username === user.username) {
       return (
         <div style={blogStyle}>
           <div>
@@ -66,7 +66,7 @@ const Blog = ({ blog, user, removeBlog }) => {
         </div>
       )
     }
-  } 
+  }
 
   return (
     <div>
@@ -74,7 +74,7 @@ const Blog = ({ blog, user, removeBlog }) => {
         {blog.title} - {blog.author}
         &ensp;<button onClick={showBlog}>show</button>
       </div>
-    </div>  
+    </div>
   )
 }
 
