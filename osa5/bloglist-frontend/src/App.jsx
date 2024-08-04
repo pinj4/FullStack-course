@@ -83,10 +83,27 @@ const App = () => {
           key={blog.id}
           blog={blog}
           user= {user}
-          removeBlog={removeBlog} />
+          handleRemoveBlog={handleRemoveBlog} />
       )}
     </div>
   )
+
+  const handleRemoveBlog = (blog) => {
+    console.log('blog to be deleted ', blog)
+    if (window.confirm(`Delete blog ${blog.title} by ${blog.author}?`)) {
+      blogService.remove(blog.id)
+      console.log('blogs ', blogs)
+      const updatedBlogs = blogs.filter((updatedBlog) => updatedBlog.id !== blog.id)
+      setBlogs(updatedBlogs)
+      setMessage(
+        `Deleted ${blog.title} by ${blog.author}`
+      )
+      setErrorMessage(false)
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
+    }
+  }
 
   const handleLogout = () => {
     window.localStorage.clear()
@@ -102,23 +119,6 @@ const App = () => {
 
   const closeBlogForm = () => {
     blogFormRef.current.toggleVisibility()
-  }
-
-  const removeBlog = (blog) => {
-    console.log('blog to be deleted ', blog)
-    if (window.confirm(`Delete blog ${blog.title} by ${blog.author}?`)) {
-      blogService.remove(blog.id)
-      console.log('blogs ', blogs)
-      const updatedBlogs = blogs.filter((updatedBlog) => updatedBlog.id !== blog.id)
-      setBlogs(updatedBlogs)
-      setMessage(
-        `Deleted ${blog.title} by ${blog.author}`
-      )
-      setErrorMessage(false)
-      setTimeout(() => {
-        setMessage(null)
-      }, 3000)
-    }
   }
 
   return (
