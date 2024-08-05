@@ -82,8 +82,9 @@ const App = () => {
         <Blog
           key={blog.id}
           blog={blog}
-          currentUser= {user.username}
-          handleRemoveBlog={handleRemoveBlog} />
+          currentUser={user.username}
+          handleRemoveBlog={handleRemoveBlog}
+          handleLike ={handleLike} />
       )}
     </div>
   )
@@ -103,6 +104,14 @@ const App = () => {
         setMessage(null)
       }, 3000)
     }
+  }
+
+  const handleLike = async (blog, blogObject) => {
+    console.log('blog likes: ', blog.likes, blogObject.likes)
+    const blogs = await blogService.like(blog.id, blogObject)
+
+    setBlogs(blogs)
+    blogService.getAll()
   }
 
   const handleLogout = () => {

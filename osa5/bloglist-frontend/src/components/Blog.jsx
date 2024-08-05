@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, currentUser, handleRemoveBlog }) => {
+const Blog = ({ blog, currentUser, handleRemoveBlog, handleLike }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -11,7 +11,6 @@ const Blog = ({ blog, currentUser, handleRemoveBlog }) => {
   }
 
   const [blogHidden, setBlogHidden] = useState(true)
-  const [blogLikes, setBlogLikes] = useState(blog.likes)
 
   const hideBlog = () => {
     setBlogHidden(true)
@@ -29,34 +28,32 @@ const Blog = ({ blog, currentUser, handleRemoveBlog }) => {
     }
   }
 
-  const likeBlog =  () => {
+  const likeBlog = () => {
     console.log('blog ', blog)
     console.log('og likes: ', blog.likes, 'after like: ', blog.likes+1)
-    const updatedLikes = blog.likes+1
     const blogObject = {
       title: blog.title,
       author: blog.author,
       url: blog.url,
-      likes: updatedLikes
+      likes: blog.likes+1
     }
-    blogService.like(blog.id, blogObject)
-    setBlogLikes(updatedLikes)
+    handleLike(blog, blogObject)
   }
 
   if (!blogHidden) {
     console.log('show: ', blog.title, blog.author, blog.url, blog.likes, blog.user)
-      return (
-        <div style={blogStyle}>
-          <div id="showBlog-content">
-            <b>{blog.title} - {blog.author}</b>&ensp;<button id="hide-button" onClick={hideBlog}>hide</button> <br />
-            {blog.url} <br />
-            likes {blogLikes}&ensp;<button id="like-button" onClick={likeBlog}>like</button><br />
-            {blog.user.username} <br />
-            {RemoveBlog()}
-          </div>
+    return (
+      <div style={blogStyle}>
+        <div id="showBlog-content">
+          <b>{blog.title} - {blog.author}</b>&ensp;<button id="hide-button" onClick={hideBlog}>hide</button> <br />
+          {blog.url} <br />
+            likes {blog.likes}&ensp;<button id="like-button" onClick={likeBlog}>like</button><br />
+          {blog.user.username} <br />
+          {RemoveBlog()}
         </div>
-      )
-    }
+      </div>
+    )
+  }
 
   return (
     <div>
