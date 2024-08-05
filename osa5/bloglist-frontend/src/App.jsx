@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
-import NewBlog from './components/newBlog'
+import NewBlog from './components/NewBlog'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
@@ -106,6 +106,30 @@ const App = () => {
     }
   }
 
+  const handleAddBlog = async (blogObject) => {
+    try {
+      closeBlogForm()
+      const returnedBlog = await blogService.create(blogObject)
+      console.log('created blog ', returnedBlog)
+      setBlogs(blogs.concat(returnedBlog))
+      setMessage(
+        `a new blog "${blogObject.title}" by ${blogObject.author} added!`
+      )
+      setErrorMessage(false)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    } catch(error) {
+      setMessage(
+        'an error occured while creating a new blog'
+      )
+      setErrorMessage(true)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    }
+  }
+
   const handleLike = async (blog, blogObject) => {
     console.log('blog likes: ', blog.likes, blogObject.likes)
     const blogs = await blogService.like(blog.id, blogObject)
@@ -139,12 +163,7 @@ const App = () => {
         {logoutForm()}
         <Togglable buttonLabel="new blog" ref={blogFormRef}>
           <NewBlog
-            user={user}
-            setErrorMessage={setErrorMessage}
-            setMessage={setMessage}
-            blogs={blogs}
-            setBlogs={setBlogs}
-            closeBlogForm={closeBlogForm}
+            handleAddBlog={handleAddBlog}
           />
         </Togglable>
         {blogList()}
