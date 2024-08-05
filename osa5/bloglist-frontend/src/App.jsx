@@ -82,7 +82,7 @@ const App = () => {
         <Blog
           key={blog.id}
           blog={blog}
-          user= {user}
+          currentUser= {user.username}
           handleRemoveBlog={handleRemoveBlog} />
       )}
     </div>

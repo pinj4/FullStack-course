@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, user, handleRemoveBlog }) => {
+const Blog = ({ blog, currentUser, handleRemoveBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -22,7 +22,11 @@ const Blog = ({ blog, user, handleRemoveBlog }) => {
   }
 
   const RemoveBlog = () => {
-    handleRemoveBlog(blog)
+    if (blog.user.username === currentUser) {
+      return (
+        <button id="removeBlog-button" onClick={() => handleRemoveBlog(blog)}>delete</button>
+      )
+    }
   }
 
   const likeBlog =  () => {
@@ -41,38 +45,24 @@ const Blog = ({ blog, user, handleRemoveBlog }) => {
 
   if (!blogHidden) {
     console.log('show: ', blog.title, blog.author, blog.url, blog.likes, blog.user)
-    console.log('users ', blog.user.username, user.username)
-    if (blog.user.username === user.username) {
       return (
         <div style={blogStyle}>
-          <div>
-            <b>{blog.title} - {blog.author}</b>&ensp;<button onClick={hideBlog}>hide</button> <br />
+          <div id="showBlog-content">
+            <b>{blog.title} - {blog.author}</b>&ensp;<button id="hide-button" onClick={hideBlog}>hide</button> <br />
             {blog.url} <br />
-            likes {blogLikes}&ensp;<button onClick={likeBlog}>like</button><br />
+            likes {blogLikes}&ensp;<button id="like-button" onClick={likeBlog}>like</button><br />
             {blog.user.username} <br />
-            <button onClick={RemoveBlog}>delete</button><br />
-          </div>
-        </div>
-      )
-    } else {
-      return (
-        <div style={blogStyle}>
-          <div>
-            <b>{blog.title} - {blog.author}</b>&ensp;<button onClick={hideBlog}>hide</button> <br />
-            {blog.url} <br />
-            likes {blogLikes}&ensp;<button onClick={likeBlog}>like</button><br />
-            {blog.user.username} <br />
+            {RemoveBlog()}
           </div>
         </div>
       )
     }
-  }
 
   return (
     <div>
       <div style={blogStyle}>
         {blog.title} - {blog.author}
-        &ensp;<button onClick={showBlog}>show</button>
+        &ensp;<button id="showBlog-button" onClick={showBlog}>show</button>
       </div>
     </div>
   )
