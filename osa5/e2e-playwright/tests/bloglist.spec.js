@@ -11,6 +11,14 @@ describe('Bloglist app', () => {
       }
     })
 
+    await request.post('http://localhost:3003/api/users', {
+      data: {
+        name: 'Test User2',
+        username: 'testuser2',
+        password: 'topsecret123'
+      }
+    })
+
     await page.goto('http://localhost:5173')
   })
 
@@ -85,6 +93,27 @@ describe('Bloglist app', () => {
 
       await expect(page.getByText('Deleted 1st test blog by writer author')).toBeVisible()
       await expect(page.getByText('1st test blog - writer author')).toBeHidden()
+    })
+
+    test('delete-button visible to blog creator only', async ({ page }) => {
+      await page.getByRole('button', { name: 'new blog' }).click()
+      await page.getByTestId('title').fill('2nd test blog')
+      await page.getByTestId('author').fill('blogger author')
+      await page.getByTestId('url').fill('www.blogurl.com')
+      await page.getByTestId('save-button').click()
+      
+      await page.getByRole('button', { name: 'show' }).click()
+      await expect(page.getByText('delete')).toBeVisible()
+
+      await page.getByRole('button', { name: 'log out' }).click()
+
+      await page.getByTestId('username').fill('testuser2')
+      await page.getByTestId('password').fill('topsecret123')
+      await page.getByTestId('login-button').click()
+      await expect(page.getByText('Test User2 logged in')).toBeVisible()
+
+      await page.getByRole('button', { name: 'show' }).last().click()
+      await expect(page.getByText('delete')).toBeHidden()
     })
   })
 })
