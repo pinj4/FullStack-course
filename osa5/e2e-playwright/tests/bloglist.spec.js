@@ -6,7 +6,7 @@ describe('Bloglist app', () => {
     await request.post('http://localhost:3003/api/users', {
       data: {
         name: 'Test User',
-        username: 'test username',
+        username: 'testuser',
         password: 'topsecret123'
       }
     })
@@ -15,13 +15,32 @@ describe('Bloglist app', () => {
   })
 
   test('Login form is shown', async ({ page }) => {
-    const title = await page. getByRole('heading', { name: 'Login' })
-    const username = await page. getByText('username')
-    const password = await page. getByText('password')
-    const button = await page. getByRole('button', { name: 'login' })
+    const title = await page.getByRole('heading', { name: 'Login' })
+    const username = await page.getByTestId('username')
+    const password = await page.getByTestId('password')
+    const button = await page.getByTestId('login-button')
     await expect(title).toBeVisible()
     await expect(username).toBeVisible()
     await expect(password).toBeVisible()
     await expect(button).toBeVisible()
+  })
+
+  describe('Login', () => {
+    test('succeeds with correct credentials', async ({ page }) => {
+      await page.getByTestId('username').fill('testuser')
+      await page.getByTestId('password').fill('topsecret123')
+      await page.getByTestId('login-button').click()
+
+      await expect(page.getByText('Test User logged in')).toBeVisible()
+    })
+
+    test('fails with wrong credentials', async ({ page }) => {
+      await page.getByTestId('username').fill('wrong name :(')
+      await page.getByTestId('password').fill('password')
+
+      await page.getByRole('button', { name: 'login' }).click()
+
+      await expect(page.getByText('wrong credentials')).toBeVisible()
+    })
   })
 })
