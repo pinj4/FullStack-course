@@ -76,5 +76,15 @@ describe('Bloglist app', () => {
       await page.getByRole('button', { name: 'like' }).click()
       await expect(page.getByText('likes 1')).toBeVisible()
     })
+
+    test('a blog can be removed by its creator', async ({page}) => {
+      await page.getByRole('button', { name: 'show' }).click()
+
+      await page.on('dialog', dialog => dialog.accept());
+      await page.getByRole('button', { name: 'delete' }).click()
+
+      await expect(page.getByText('Deleted 1st test blog by writer author')).toBeVisible()
+      await expect(page.getByText('1st test blog - writer author')).toBeHidden()
+    })
   })
 })
