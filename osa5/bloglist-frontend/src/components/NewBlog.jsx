@@ -23,25 +23,31 @@ const NewBlog = ({ handleAddBlog }) => {
     <form onSubmit={addBlog}>
       <h2>add a new blog</h2>
       <div>
-        title: <input id="title"
+        title: <input
+          data-testid='title'
+          id="title"
           value={title}
           onChange={({ target }) => setTitle(target.value)}
         />
       </div>
       <div>
-        author: <input id="author"
+        author: <input
+          data-testid='author'
+          id="author"
           value={author}
           onChange={({ target }) => setAuthor(target.value)}
         />
       </div>
       <div>
-        url: <input id="url"
+        url: <input
+          data-testid='url'
+          id="url"
           value={url}
           onChange={({ target }) => setUrl(target.value)}
         />
       </div>
       <div>
-        <button id="save" type="submit">save</button>
+        <button data-testid='save-button' id="save" type="submit">save</button>
       </div>
     </form>
   )

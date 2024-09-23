@@ -38,9 +38,29 @@ describe('Bloglist app', () => {
       await page.getByTestId('username').fill('wrong name :(')
       await page.getByTestId('password').fill('password')
 
-      await page.getByRole('button', { name: 'login' }).click()
+      await page.getByTestId('login-button').click()
+
 
       await expect(page.getByText('wrong credentials')).toBeVisible()
+    })
+  })
+
+  describe('When logged in', () => {
+    beforeEach(async ({ page }) => {
+      await page.getByTestId('username').fill('testuser')
+      await page.getByTestId('password').fill('topsecret123')
+      await page.getByTestId('login-button').click()
+    })
+  
+    test('a new blog can be created', async ({ page }) => {
+      await page.getByRole('button', { name: 'new blog' }).click()
+      await page.getByTestId('title').fill('test blog')
+      await page.getByTestId('author').fill('blog author')
+      await page.getByTestId('url').fill('www.urlhere.com')
+      await page.getByTestId('save-button').click()
+
+      await expect(page.getByText('a new blog "test blog" by blog author added!')).toBeVisible()
+      await expect(page.getByText('test blog - blog author')).toBeVisible()
     })
   })
 })
