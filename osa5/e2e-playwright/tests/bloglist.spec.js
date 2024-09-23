@@ -50,6 +50,12 @@ describe('Bloglist app', () => {
       await page.getByTestId('username').fill('testuser')
       await page.getByTestId('password').fill('topsecret123')
       await page.getByTestId('login-button').click()
+
+      await page.getByRole('button', { name: 'new blog' }).click()
+      await page.getByTestId('title').fill('1st test blog')
+      await page.getByTestId('author').fill('writer author')
+      await page.getByTestId('url').fill('www.urlforblog.com')
+      await page.getByTestId('save-button').click()
     })
   
     test('a new blog can be created', async ({ page }) => {
@@ -61,6 +67,14 @@ describe('Bloglist app', () => {
 
       await expect(page.getByText('a new blog "test blog" by blog author added!')).toBeVisible()
       await expect(page.getByText('test blog - blog author')).toBeVisible()
+    })
+
+    test('a blog can be liked', async ({ page }) => {
+      await page.getByRole('button', { name: 'show' }).click()
+      await expect(page.getByText('likes 0')).toBeVisible()
+
+      await page.getByRole('button', { name: 'like' }).click()
+      await expect(page.getByText('likes 1')).toBeVisible()
     })
   })
 })
