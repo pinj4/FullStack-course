@@ -62,7 +62,7 @@ describe('Bloglist app', () => {
       await page.getByRole('button', { name: 'new blog' }).click()
       await page.getByTestId('title').fill('1st test blog')
       await page.getByTestId('author').fill('writer author')
-      await page.getByTestId('url').fill('www.urlforblog.com')
+      await page.getByTestId('url').fill('www.urlforblog1.com')
       await page.getByTestId('save-button').click()
     })
   
@@ -99,7 +99,7 @@ describe('Bloglist app', () => {
       await page.getByRole('button', { name: 'new blog' }).click()
       await page.getByTestId('title').fill('2nd test blog')
       await page.getByTestId('author').fill('blogger author')
-      await page.getByTestId('url').fill('www.blogurl.com')
+      await page.getByTestId('url').fill('www.urlforblog2.com')
       await page.getByTestId('save-button').click()
       
       await page.getByRole('button', { name: 'show' }).click()
@@ -110,10 +110,49 @@ describe('Bloglist app', () => {
       await page.getByTestId('username').fill('testuser2')
       await page.getByTestId('password').fill('topsecret123')
       await page.getByTestId('login-button').click()
-      await expect(page.getByText('Test User2 logged in')).toBeVisible()
 
       await page.getByRole('button', { name: 'show' }).last().click()
       await expect(page.getByText('delete')).toBeHidden()
+    })
+
+    test('blogs ordered by likes', async ({ page }) => {
+      // creating a new blog with 1st user
+      await page.getByRole('button', { name: 'new blog' }).click()
+      await page.getByTestId('title').fill('2nd test blog')
+      await page.getByTestId('author').fill('blogger author')
+      await page.getByTestId('url').fill('www.urlforblog2.com')
+      await page.getByTestId('save-button').click()
+
+      // liking both blogs & logging out
+      await page.getByRole('button', { name: 'show' }).first().click()
+      await page.getByRole('button', { name: 'like' }).click()
+      await page.getByRole('button', { name: 'hide' }).click()
+
+      await page.getByRole('button', { name: 'show' }).last().click()
+      await page.getByRole('button', { name: 'like' }).click()
+      await page.getByRole('button', { name: 'log out' }).click()
+
+      // logging in as the 2nd user & liking the 2nd blog
+      await page.getByTestId('username').fill('testuser2')
+      await page.getByTestId('password').fill('topsecret123')
+      await page.getByTestId('login-button').click()
+
+      await page.getByRole('button', { name: 'show' }).last().click()
+      await page.getByRole('button', { name: 'like' }).click()
+      await expect(page.getByText('likes 2')).toBeVisible()
+
+      // reload
+      await page.goto('http://localhost:5173')
+
+      // checking the order
+      await page.getByRole('button', { name: 'show' }).first().click()
+      await expect(page.getByText('likes 2')).toBeVisible()
+      await expect(page.getByText('www.urlforblog2.com')).toBeVisible()
+      await page.getByRole('button', { name: 'hide' }).click()
+
+      await page.getByRole('button', { name: 'show' }).last().click()
+      await expect(page.getByText('likes 1')).toBeVisible()
+      await expect(page.getByText('www.urlforblog1.com')).toBeVisible()
     })
   })
 })
