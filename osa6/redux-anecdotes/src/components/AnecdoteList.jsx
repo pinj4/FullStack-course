@@ -29,6 +29,7 @@ const AnecdoteList = () => {
     return state.anecdotes
   })
   const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
+  console.log('anecdotes ', anecdotes)
 
   const handleClick = anecdote => {
     dispatch(voteAnecdote(anecdote.id))
