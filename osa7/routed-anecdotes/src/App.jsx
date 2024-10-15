@@ -73,21 +73,27 @@ const CreateNew = ({ addNew, content, author, info} ) => {
     info.reset()
   }
 
+  const parse = (field) => {
+    // eslint-disable-next-line no-unused-vars
+    const {reset, ...input} = field
+    return input
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <input {...parse(content)} />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...parse(author)} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...parse(info)} />
         </div>
         <button>create</button>
         <button onClick={handleReset}>reset</button>
