@@ -110,6 +110,10 @@ const typeDefs = `
       published: Int!
       genres: [String]!
     ):Book
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ):Author
   }
 `
 const resolvers = {
@@ -125,7 +129,7 @@ const resolvers = {
                 && b.genres.find(bg => bg === args.genre))
       }
       else if (args.genre) {
-          return books.filter(b => b.genres.find(bg => bg === args.genre))
+        return books.filter(b => b.genres.find(bg => bg === args.genre))
       }
       return books.filter(b => b.author === args.author)
     },
@@ -151,6 +155,15 @@ const resolvers = {
       }
 
       return book
+    },
+    editAuthor: (root, args) => {
+      const toBeUpdated = authors.find(a => a.name == args.name)
+      if (!toBeUpdated) {
+        return null
+      }
+      const updated = {...toBeUpdated, born: args.setBornTo}
+      authors = authors.map(a => a.id !== toBeUpdated.id ? a : updated)
+      return updated
     }
   }
 }
