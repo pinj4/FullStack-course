@@ -1,5 +1,6 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
+const { v1: uuid } = require('uuid')
 
 let authors = [
   {
@@ -101,23 +102,32 @@ const typeDefs = `
     allBooks(author: String, genre:String): [Book!]!
     allAuthors: [Author!]!
   }
+
+  type Mutation {
+    addBook(
+      title: String!
+      author: String!
+      published: Int!
+      genres: [String]!
+    ):Book
+  }
 `
 const resolvers = {
   Query: {
     authorCount: () => authors.length,
     bookCount: () => books.length,
     allBooks: (root, args) => {
-        if (!args.author && !args.genre) {
-            return books
-        }
-        else if (args.author && args.genre) {
-            return books.filter(b => b.author === args.author 
-                   && b.genres.find(bg => bg === args.genre))
-        }
-        else if (args.genre) {
-            return books.filter(b => b.genres.find(bg => bg === args.genre))
-        }
-        return books.filter(b => b.author === args.author)
+      if (!args.author && !args.genre) {
+        return books
+      }
+      else if (args.author && args.genre) {
+        return books.filter(b => b.author === args.author 
+                && b.genres.find(bg => bg === args.genre))
+      }
+      else if (args.genre) {
+          return books.filter(b => b.genres.find(bg => bg === args.genre))
+      }
+      return books.filter(b => b.author === args.author)
     },
     allAuthors: () => authors
   },
@@ -125,8 +135,22 @@ const resolvers = {
   Author: {
     name: (root) => root.name,
     bookCount: (root) => {
-        const authorsBooks = books.filter(b => b.author === root.name)
-        return authorsBooks.length
+      const authorsBooks = books.filter(b => b.author === root.name)
+      return authorsBooks.length
+    }
+  },
+
+  Mutation: {
+    addBook: (root, args) => {
+      const book = { ...args, id: uuid() }
+      books = books.concat(book)
+
+      if (!authors.find(a => a.name === args.author)) {
+        const author = { name: args.author, id: uuid() }
+        authors = authors.concat(author)
+      }
+
+      return book
     }
   }
 }
