@@ -16,15 +16,14 @@ const Authors = (props) => {
   const result = useQuery(ALL_AUTHORS)
 
   if (result.loading)  {
-    console.log('loading...')
     return <div>loading...</div>
   }
-
-  const authors = result.data.allAuthors
 
   if (!props.show) {
     return null
   }
+
+  const authors = result.data.allAuthors
 
   return (
     <div>
