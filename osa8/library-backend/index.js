@@ -1,6 +1,7 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { v1: uuid } = require('uuid')
+const { GraphQLError } = require('graphql')
 
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
@@ -95,14 +96,52 @@ const resolvers = {
       if (!found) {
         console.log("CANT FIND")
         const bookAuthor = new Author({ name: args.author})
-        await bookAuthor.save()
+        if (args.title.length > 5) {
+          try {
+            await bookAuthor.save()
+          } catch (error) {
+            throw new GraphQLError(
+              'Saving author failed: name needs to be at least 4 characters', {
+                extensions: {
+                  code: 'BAD_USER_INPUT',
+                  invalidArgs: args.title,
+                  error
+                }
+              })
+            }
+          console.log('new author added ', bookAuthor)
+        }
         const book = new Book({ ...args, author: bookAuthor})
+        try {
+          await book.save()
+        } catch (error) {
+          throw new GraphQLError(
+            'Saving book failed: title needs to be at least 5 characters', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.title,
+              error
+            }
+          })
+        }
         console.log('new book added ', book)
-        return book.save()
+        return book
       } else {
         const book = new Book({ ...args, author: found})
+        try {
+          await book.save()
+        } catch (error) {
+          throw new GraphQLError(
+            'Saving book failed: title needs to be at least 5 characters', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.name,
+              error
+            }
+          })
+        }
         console.log('new book added ', book)
-        return book.save()
+        return book
       }
     },
     editAuthor: async (root, args) => {
