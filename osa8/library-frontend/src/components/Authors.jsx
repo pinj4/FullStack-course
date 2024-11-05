@@ -6,6 +6,7 @@ const Authors = (props) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
   const result = useQuery(ALL_AUTHORS)
+  const token = localStorage.getItem('library-user-token')
 
   const [ editBirthyear ] = useMutation(EDIT_BIRTHYEAR, {
     refetchQueries: [ 
@@ -30,6 +31,30 @@ const Authors = (props) => {
 
     console.log('editing..')
     setBorn('')
+  }
+
+  if (!token) {
+    return (
+      <div>
+      <h2>authors</h2>
+      <table>
+        <tbody>
+          <tr>
+            <th></th>
+            <th>born</th>
+            <th>books</th>
+          </tr>
+          {authors.map((a) => (
+            <tr key={a.name}>
+              <td>{a.name}</td>
+              <td>{a.born}</td>
+              <td>{a.bookCount}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      </div>
+    )
   }
 
   return (
