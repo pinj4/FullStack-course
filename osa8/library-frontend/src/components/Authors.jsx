@@ -2,11 +2,10 @@ import { useState } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
 import { ALL_AUTHORS, EDIT_BIRTHYEAR } from '../queries'
 
-const Authors = (props) => {
+const Authors = ({ show, token }) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
   const result = useQuery(ALL_AUTHORS)
-  const token = localStorage.getItem('library-user-token')
 
   const [ editBirthyear ] = useMutation(EDIT_BIRTHYEAR, {
     refetchQueries: [ 
@@ -18,7 +17,7 @@ const Authors = (props) => {
     return <div>loading...</div>
   }
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 

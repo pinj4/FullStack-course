@@ -85,3 +85,13 @@ export const FILTER_BOOKS = gql `
     }
   }
 `
+
+export const CURRENT_USER = gql`
+  query {
+    me {
+      username,
+      favoriteGenre
+      id
+    }
+  }
+`
