@@ -5,7 +5,7 @@ import { ALL_BOOKS, FILTER_BOOKS } from '../queries'
 const Books = (props) => {
   const result = useQuery(ALL_BOOKS)
   const [genre, setGenre] = useState('')
-  const filterResult = useQuery(FILTER_BOOKS, {variables: {genre}})
+  const filterResult = useQuery(FILTER_BOOKS, {variables: {genre}, fetchPolicy: 'no-cache'})
 
 
   if (result.loading || filterResult.loading)  {

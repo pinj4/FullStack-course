@@ -12,7 +12,7 @@ const NewBook = (props) => {
   const [ createBook ] = useMutation(CREATE_BOOK, {
     refetchQueries: [
       { query: ALL_BOOKS }, 
-      { query: ALL_AUTHORS } 
+      { query: ALL_AUTHORS }
     ]
   })
 
