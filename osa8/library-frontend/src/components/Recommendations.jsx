@@ -1,15 +1,14 @@
 import { useQuery } from '@apollo/client'
 import { useState, useEffect } from 'react'
-import { FILTER_BOOKS, CURRENT_USER } from '../queries'
+import { ALL_BOOKS, CURRENT_USER } from '../queries'
 
 const Recommendations = ({ show }) => {
   const [genre, setGenre] = useState('')
 
-  const currentUser = useQuery(CURRENT_USER, {
-    fetchPolicy:'no-cache'
-    }
+  const currentUser = useQuery(
+    CURRENT_USER, 
+    { fetchPolicy:'cache-and-network' }
   )
-  console.log('RECC currentUser', currentUser)
 
   useEffect(() => {
     if ( currentUser.data ) {
@@ -18,11 +17,10 @@ const Recommendations = ({ show }) => {
     }
   }, [currentUser.data])
 
-  const filterResult = useQuery(FILTER_BOOKS, {
-    variables: {genre: genre}, 
+  const filterResult = useQuery(ALL_BOOKS, {
+    variables: {genre: genre},
     skip: !genre
   })
-
 
   if (!show ) {
     return null
@@ -32,6 +30,7 @@ const Recommendations = ({ show }) => {
     return <div>loading...</div>
   }
 
+  const filteredBooks = filterResult.data.allBooks
 
   return (
     <div>
@@ -45,7 +44,7 @@ const Recommendations = ({ show }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {filterResult.data.allBooks.map((a) => (
+          {filteredBooks.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>

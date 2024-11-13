@@ -8,7 +8,7 @@ import LoginForm from './components/LoginForm'
 import Recommendations from './components/Recommendations'
 
 
-const updateCache = (cache, query, addedBook) => {
+const updateCache = (cache, query, query2, addedBook) => {
   // helper that is used to eliminate saving same book twice
   const uniqByTitle = (b) => {
     let seen = new Set()
@@ -20,7 +20,13 @@ const updateCache = (cache, query, addedBook) => {
 
   cache.updateQuery(query, ({ allBooks }) => {
     return {
-      allBooks: uniqByTitle(allBooks.concat(addedBook)),
+      allBooks: uniqByTitle(allBooks.concat(addedBook))
+    }
+  })
+
+  cache.updateQuery(query2, ({ allBooks }) => {
+    return {
+      allBooks: uniqByTitle(allBooks.concat(addedBook))
     }
   })
 }
@@ -34,7 +40,12 @@ const App = () => {
     onData: ({ data }) => {
       const addedBook = data.data.bookAdded
       window.alert(`${addedBook.title} by ${addedBook.author.name} added`)
-      updateCache(client.cache, { query: ALL_BOOKS }, addedBook)
+      updateCache(
+        client.cache, 
+        { query: ALL_BOOKS},
+        { query: ALL_BOOKS, variables: { genre: '' }},
+        addedBook
+      )
     }
   })
 

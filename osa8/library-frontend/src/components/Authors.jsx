@@ -7,11 +7,7 @@ const Authors = ({ show, token }) => {
   const [born, setBorn] = useState('')
   const result = useQuery(ALL_AUTHORS)
 
-  const [ editBirthyear ] = useMutation(EDIT_BIRTHYEAR, {
-    refetchQueries: [ 
-      { query: ALL_AUTHORS } 
-    ]
-  })
+  const [ editBirthyear ] = useMutation(EDIT_BIRTHYEAR)
 
   if (result.loading)  {
     return <div>loading...</div>
@@ -22,11 +18,12 @@ const Authors = ({ show, token }) => {
   }
 
   const authors = result.data.allAuthors
+  console.log('authors ', authors)
 
   const submit = async (event) => {
     event.preventDefault()
     const bornInt = parseInt(born)
-    editBirthyear({ variables: { name, setBornTo: bornInt } })
+    editBirthyear({ variables: { name: name, setBornTo: bornInt } })
 
     console.log('editing..')
     setBorn('')
