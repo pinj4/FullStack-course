@@ -13,4 +13,4 @@ const calculateBmi = (h: number, w: number):string => {
   }
 }
 
-console.log(calculateBmi(180, 74))
+console.log(calculateBmi(180, 74));
