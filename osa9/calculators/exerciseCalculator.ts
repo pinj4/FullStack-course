@@ -1,3 +1,5 @@
+import { isNotNumber } from "./utils";
+
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -8,14 +10,25 @@ interface Result {
   average: number;
 }
 
+const parseInput = (args:string[]):number[] => {
+  const argsArray: string[] = args.slice(2);
+
+  let argsInt: number[] = [];
+  argsArray.map((i) => argsInt.push(Number(i)));
+
+  if (argsInt.map((i) => isNotNumber(i)).includes(true)) {
+    throw new Error('input needs to be numbers');
+  } else return argsInt;
+}
+
 const calculateExercises = (exercises: number[], target: number):Result => {
-  let days: number = exercises.length;
-  let trainingDays: number = exercises.filter(e => e !== 0).length;
-  let trainingHours: number = exercises.reduce((sum, i) => sum + i, 0);
-  let avg: number = trainingHours / days;
-  let success: boolean = avg >= target;
-  let trainingPercentage: number = avg / target;
-  
+  const days: number = exercises.length;
+  const trainingDays: number = exercises.filter(e => e !== 0).length;
+  const trainingHours: number = exercises.reduce((sum, i) => sum + i, 0);
+  const avg: number = trainingHours / days;
+  const success: boolean = avg >= target;
+  const trainingPercentage: number = avg / target;
+
   let rating: number;
   let desc: string;
   if (trainingPercentage >= 1) {
@@ -36,8 +49,17 @@ const calculateExercises = (exercises: number[], target: number):Result => {
     rating: rating,
     ratingDescription: desc,
     target: target,
-    average: avg,
+    average: avg
   }
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const [ target, ...exercises ] = parseInput(process.argv);
+  console.log(calculateExercises(exercises, target));
+} catch (error: unknown) {
+  let errorMessage = 'Error'
+  if (error instanceof Error) {
+    errorMessage += ': ' + error.message;
+  }
+  console.log(errorMessage);
+}
