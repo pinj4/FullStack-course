@@ -21,12 +21,16 @@ const calculateBmi = (h: number, w: number):string => {
     return 'Normal range';
   } else if (bmi > 24.9 && bmi <= 29.9) {
     return 'Overweight';
-  } else if (bmi > 29.9) {
+  } else {
     return 'Obese';
   }
 }
+if (require.main === module) {
+  const h: number = Number(process.argv[2])
+  const w: number = Number(process.argv[3])
 
-const h: number = Number(process.argv[2])
-const w: number = Number(process.argv[3])
+  console.log(calculateBmi(h, w));
+}
 
-console.log(calculateBmi(h, w));
+
+export default calculateBmi;
