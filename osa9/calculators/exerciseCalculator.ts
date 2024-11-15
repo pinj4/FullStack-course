@@ -1,5 +1,3 @@
-import { isNotNumber } from "./utils";
-
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -13,13 +11,13 @@ interface Result {
 const parseInput = (args:string[]):number[] => {
   const argsArray: string[] = args.slice(2);
 
-  let argsInt: number[] = [];
+  const argsInt: number[] = [];
   argsArray.map((i) => argsInt.push(Number(i)));
 
-  if (argsInt.map((i) => isNotNumber(i)).includes(true)) {
+  if (argsInt.map((i) => isNaN(i)).includes(true)) {
     throw new Error('input needs to be numbers');
   } else return argsInt;
-}
+};
 
 const calculateExercises = (exercises: number[], target: number):Result => {
   const days: number = exercises.length;
@@ -50,14 +48,14 @@ const calculateExercises = (exercises: number[], target: number):Result => {
     ratingDescription: desc,
     target: target,
     average: avg
-  }
-}
+  };
+};
 
 try {
   const [ target, ...exercises ] = parseInput(process.argv);
   console.log(calculateExercises(exercises, target));
 } catch (error: unknown) {
-  let errorMessage = 'Error'
+  let errorMessage = 'Error';
   if (error instanceof Error) {
     errorMessage += ': ' + error.message;
   }

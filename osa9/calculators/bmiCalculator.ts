@@ -1,20 +1,17 @@
-import { isNotNumber } from "./utils";
-
 const calculateBmi = (h: number, w: number):string => {
   try {
-    if (isNotNumber(h) || isNotNumber(w)) {
+    if (isNaN(h) || isNaN(w)) {
       throw new Error('input needs to be a number');
     }
   } catch (error: unknown) {
-    let errorMessage = 'Error'
+    let errorMessage = 'Error';
     if (error instanceof Error) {
-      errorMessage += ': ' + error.message
+      errorMessage += ': ' + error.message;
     }
-    return errorMessage
+    return errorMessage;
   }
 
-  let bmi: number;
-  bmi = w / ((h / 100)**2);
+  const bmi: number = w / ((h / 100)**2);
   if (bmi <= 18.4) {
     return 'Underweight';
   } else if (bmi > 18.4 && bmi <= 24.9) {
@@ -24,10 +21,10 @@ const calculateBmi = (h: number, w: number):string => {
   } else {
     return 'Obese';
   }
-}
+};
 if (require.main === module) {
-  const h: number = Number(process.argv[2])
-  const w: number = Number(process.argv[3])
+  const h: number = Number(process.argv[2]);
+  const w: number = Number(process.argv[3]);
 
   console.log(calculateBmi(h, w));
 }
