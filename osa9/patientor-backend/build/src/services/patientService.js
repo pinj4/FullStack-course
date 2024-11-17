@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const patients_1 = __importDefault(require("../../data/patients"));
 const uuid_1 = require("uuid");
 const patients = patients_1.default;
-const getPatientsWithoutSsn = () => {
+const getPatientsWithoutSSN = () => {
     return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
         id,
         name,
@@ -21,6 +21,6 @@ const addPatient = (newPatientInfo) => {
     return newPatient;
 };
 exports.default = {
-    getPatientsWithoutSsn,
+    getPatientsWithoutSSN,
     addPatient
 };
