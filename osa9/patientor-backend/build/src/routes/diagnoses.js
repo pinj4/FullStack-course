@@ -10,6 +10,6 @@ router.get('/', (_req, res) => {
     res.send(diagnosisService_1.default.getDiagnoses());
 });
 router.post('/', (_req, res) => {
-    res.send('Saving a diary!');
+    res.send('Saving a diagnosis!');
 });
 exports.default = router;

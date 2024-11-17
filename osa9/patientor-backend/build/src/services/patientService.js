@@ -16,7 +16,6 @@ const getPatientsWithoutSsn = () => {
     }));
 };
 const addPatient = (newPatientInfo) => {
-    // const id = uuid();
     const newPatient = Object.assign({ id: (0, uuid_1.v1)() }, newPatientInfo);
     patients.push(newPatient);
     return newPatient;
@@ -25,9 +24,3 @@ exports.default = {
     getPatientsWithoutSsn,
     addPatient
 };
-// "id": "d2773822-f723-11e9-8f0b-362b9e155667",
-// "name": "Dana Scully",
-// "dateOfBirth": "1974-01-05",
-// "ssn": "050174-432N",
-// "gender": "female",
-// "occupation": "Forensic Pathologist"
