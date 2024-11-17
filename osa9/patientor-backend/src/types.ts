@@ -1,7 +1,16 @@
+import { z } from 'zod';
+import { newPatientInfoSchema } from './utils';
+
 export interface DiagnosisEntry {
   code: string;
   name: string;
   latin?: string;
+};
+
+export enum Gender {
+  Female = 'female',
+  Male = 'male',
+  Other = 'other'
 };
 
 export interface PatientInfo {
@@ -9,16 +18,10 @@ export interface PatientInfo {
   name: string;
   dateOfBirth: string;
   ssn: string;
-  gender: string;
+  gender: Gender;
   occupation: string;
 };
 
-export type PatientWithoutSsn = Omit<PatientInfo, "ssn">;
+export type PatientWithoutSSN = Omit<PatientInfo, "ssn">;
 
-export type NewPatientInfo = Omit<PatientInfo, 'id'>;
-
-export enum Gender {
-  Female = 'female',
-  Male = 'male',
-  Other = 'other'
-};
+export type NewPatientInfo = z.infer<typeof newPatientInfoSchema>;
