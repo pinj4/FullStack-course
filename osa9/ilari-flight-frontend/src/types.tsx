@@ -22,7 +22,11 @@ export interface DiaryEntry {
 };
 
 export interface DiaryEntryProps {
-    diaryEntry: NonSensitiveDiaryEntry
+  diaryEntry: NonSensitiveDiaryEntry
+};
+
+export interface DiaryEntryFormProps {
+  handleNewEntry: (newEntry: NewDiaryEntry) => Promise<void>
 };
   
 export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
