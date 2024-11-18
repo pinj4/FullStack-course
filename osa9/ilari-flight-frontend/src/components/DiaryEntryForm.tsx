@@ -27,24 +27,24 @@ const DiaryEntryForm = (props: DiaryEntryFormProps) => {
     <div>
       <form onSubmit={addEntry}>
         <p>
-        date: <input value={date}
-        onChange={(e) => setDate(e.target.value)}
-        />
+          date: <input value={date}
+          onChange={(e) => setDate(e.target.value)}
+          />
         </p>
         <p>
-        visibility: <input value={visibility}
-        onChange={(e) => setVisibility(e.target.value)}
-        />
+          visibility: <input value={visibility}
+          onChange={(e) => setVisibility(e.target.value)}
+          />
         </p>
         <p>
-        weather: <input value={weather}
-        onChange={(e) => setWeather(e.target.value)}
-        />
+          weather: <input value={weather}
+          onChange={(e) => setWeather(e.target.value)}
+          />
         </p>
         <p>
-        comment: <input value={comment}
-        onChange={(e) => setComment(e.target.value)}
-        />
+          comment: <input value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          />
         </p>
         <button type='submit'>add</button>
       </form>

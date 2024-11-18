@@ -28,6 +28,10 @@ export interface DiaryEntryProps {
 export interface DiaryEntryFormProps {
   handleNewEntry: (newEntry: NewDiaryEntry) => Promise<void>
 };
+
+export interface NotifProps {
+  message: string;
+};
   
 export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
   
