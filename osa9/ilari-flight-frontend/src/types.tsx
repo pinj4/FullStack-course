@@ -21,18 +21,20 @@ export interface DiaryEntry {
   comment: string;
 };
 
+export type DiaryEntryType = DiaryEntry;
+
 export interface DiaryEntryProps {
   diaryEntry: NonSensitiveDiaryEntry
 };
 
 export interface DiaryEntryFormProps {
-  handleNewEntry: (newEntry: NewDiaryEntry) => Promise<void>
+  addNewEntry: (newEntry: DiaryEntryType) => void
 };
 
 export interface NotifProps {
   message: string;
 };
-  
+
 export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
   
 export type NonSensitiveDiaryEntry = Omit<DiaryEntry, 'comment'>;

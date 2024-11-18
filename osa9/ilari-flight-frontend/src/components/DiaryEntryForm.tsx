@@ -1,52 +1,102 @@
+import axios from "axios";
 import { useState } from "react";
 import { DiaryEntryFormProps, Visibility, Weather } from "../types";
+import diaryService from "../services/diaryService";
+import Notification from "../components/Notification";
 
 const DiaryEntryForm = (props: DiaryEntryFormProps) => {
-  const handleNewEntry = props.handleNewEntry;
+  const addNewEntry = props.addNewEntry;
   const [date, setDate] = useState('');
-  const [visibility, setVisibility] = useState('');
-  const [weather, setWeather] = useState('');
+  const [visibility, setVisibility] = useState<Visibility>(Visibility.Great);
+  const [weather, setWeather] = useState<Weather>(Weather.Sunny);
   const [comment, setComment] = useState('');
+  const [ errorMessage, setErrorMessage ] = useState('');
 
-  const addEntry = (event: React.SyntheticEvent) => {
+  const handleNewEntry = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    handleNewEntry({
-      date: date,
-      visibility: visibility as Visibility,
-      weather: weather as Weather,
-      comment: comment
-    });
+    try {
+      const returnedEntry = await diaryService.addEntry({
+        date: date,
+        visibility: visibility as Visibility,
+        weather: weather as Weather,
+        comment: comment
+      });
+      console.log('created entry ', returnedEntry);
+      addNewEntry(returnedEntry);
+      reset();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.status);
+        console.error(error.response);
+        setErrorMessage(error.response?.data);
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 5000);
+        reset();
+      } else {
+        console.error(error);
+        reset();
+      };
+    };
+  };
 
+  const reset = () => {
     setDate('');
-    setVisibility('');
-    setWeather('');
+    setVisibility(Visibility.Great);
+    setWeather(Weather.Sunny);
     setComment('');
   };
 
-  return(
+  return (
     <div>
-      <form onSubmit={addEntry}>
+      <h2>Add new entry</h2>
+      <Notification message={errorMessage} /> 
+      <form>
         <p>
-          date: <input value={date}
+          date: <input type="date" value={date}
           onChange={(e) => setDate(e.target.value)}
           />
         </p>
         <p>
-          visibility: <input value={visibility}
-          onChange={(e) => setVisibility(e.target.value)}
-          />
+          visibility: 
+          <input type="radio" name="visibility" value={visibility}
+          onChange={() => setVisibility(Visibility.Great)} checked={visibility === Visibility.Great}
+          /> Great
+          <input type="radio" name="visibility" value={visibility}
+          onChange={() => setVisibility(Visibility.Good)}
+          /> Good
+          <input type="radio" name="visibility" value={visibility}
+          onChange={() => setVisibility(Visibility.Ok)}
+          /> Ok
+          <input type="radio" name="visibility" value={visibility}
+          onChange={() => setVisibility(Visibility.Poor)}
+          /> Poor
         </p>
         <p>
-          weather: <input value={weather}
-          onChange={(e) => setWeather(e.target.value)}
-          />
+          weather: 
+          <input type="radio" name="weather" value={weather}
+          onChange={() => setWeather(Weather.Sunny)} checked={weather === Weather.Sunny}
+          /> Sunny
+          <input type="radio" name="weather" value={weather}
+          onChange={() => setWeather(Weather.Cloudy)}
+          /> Cloudy
+          <input type="radio" name="weather" value={weather}
+          onChange={() => setWeather(Weather.Rainy)}
+          /> Rainy
+          <input type="radio" name="weather" value={weather}
+          onChange={() => setWeather(Weather.Windy)}
+          /> Windy
+          <input type="radio" name="weather" value={weather}
+          onChange={() => setWeather(Weather.Stormy)}
+          /> Stormy
         </p>
         <p>
           comment: <input value={comment}
           onChange={(e) => setComment(e.target.value)}
           />
         </p>
-        <button type='submit'>add</button>
+        <button onClick={reset}>reset</button>
+        <button onClick={handleNewEntry}>add</button>
       </form>
     </div>
   );

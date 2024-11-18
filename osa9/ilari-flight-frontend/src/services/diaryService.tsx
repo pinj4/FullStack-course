@@ -15,11 +15,11 @@ const addEntry = async(object: NewDiaryEntry) => {
   const { data } = await axios.post<DiaryEntry>(
     `${apiBaseUrl}/diaries`, object
   );
-  
+
   return data;
 };
 
-export {
+export default {
   getAll,
   addEntry
 };
