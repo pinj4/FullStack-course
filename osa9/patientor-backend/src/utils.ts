@@ -6,8 +6,7 @@ const newPatientInfoSchema = z.object({
     dateOfBirth: z.string().date(),
     ssn: z.string(),
     gender: z.nativeEnum(Gender),
-    occupation: z.string(),
-    entries: z.object({ }).array()
+    occupation: z.string()
 });
 
 const toNewPatientInfo = (object: unknown): NewPatientInfo => {
