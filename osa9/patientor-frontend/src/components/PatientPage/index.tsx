@@ -17,10 +17,20 @@ const PatientPage = () => {
 
   return (
     <div>
-      <h3>{patient?.name}</h3>
-      <p>gender: {patient?.gender}</p>
-      <p>ssh: {patient?.ssn}</p>
-      <p>occupation: {patient?.occupation}</p>
+      <h1>{patient?.name}</h1>
+      gender: {patient?.gender}<br />
+      ssh: {patient?.ssn}<br />
+      occupation: {patient?.occupation}<br />
+      <h2>entries</h2>
+        {patient?.entries.map((entry) => (
+          <p key={entry.id}>
+            <b>{entry.date}</b><br />
+            <i>{entry.description}</i><br />
+            {entry.diagnosisCodes?.map((d =>
+              <li key={d}>{d}</li>
+            ))}
+          </p>
+        ))}
     </div>
   );
 };
