@@ -77,9 +77,6 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
           ))}
         </TableBody>
       </Table>
-      {/* <Routes>
-          <Route path={"/patients/"} element={<PatientPage patients={patients} patient={patient} />} />
-      </Routes> */}
       <AddPatientModal
         modalOpen={modalOpen}
         onSubmit={submitNewPatient}
