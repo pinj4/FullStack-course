@@ -2,13 +2,13 @@ import express from 'express';
 import { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import patientService from '../services/patientService';
-import { NewPatientInfo, PatientWithoutSSN, PatientInfo } from '../types';
+import { NewPatientInfo, NonSensitivePatient, PatientInfo } from '../types';
 import { newPatientInfoSchema } from '../utils';
 
 const router = express.Router();
 
-router.get('/', (_req, res: Response<PatientWithoutSSN[]>) => {
-  res.send(patientService.getPatientsWithoutSSN());
+router.get('/', (_req, res: Response<NonSensitivePatient[]>) => {
+  res.send(patientService.getNonSensitivePatients());
 });
 
 const newPatientParser = (req: Request, _res: Response, next: NextFunction) => { 
@@ -32,6 +32,14 @@ const errorMiddleware = (error: unknown, _req: Request, res: Response, next: Nex
 router.post('/', newPatientParser, (req: Request<unknown, unknown, NewPatientInfo>, res: Response<PatientInfo>) => {
   const addedPatient = patientService.addPatient(req.body);
   res.json(addedPatient);
+});
+
+router.get('/:id', (req: Request, res:Response) => {
+  const patient = patientService.getPatient(req.params.id);
+  if (patient === null) {
+    res.status(400).send("can't find patient");
+  };
+  res.send(patient);
 });
 
 router.use(errorMiddleware);

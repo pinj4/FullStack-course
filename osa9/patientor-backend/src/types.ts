@@ -20,8 +20,15 @@ export interface PatientInfo {
   ssn: string;
   gender: Gender;
   occupation: string;
+  entries: Entry[]
 };
 
-export type PatientWithoutSSN = Omit<PatientInfo, "ssn">;
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface Entry {
+}
+
+export type EntryType = null;
+
+export type NonSensitivePatient = Omit<PatientInfo, 'ssn' | 'entries' >;
 
 export type NewPatientInfo = z.infer<typeof newPatientInfoSchema>;
